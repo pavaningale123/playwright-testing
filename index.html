@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoTest Playground — Automation Testing Practice Site</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --bg2: #111827;
+    --bg3: #1a2235;
+    --card: #151d2e;
+    --border: #2a3550;
+    --border2: #3a4f6e;
+    --accent: #00d4aa;
+    --accent2: #6366f1;
+    --accent3: #f59e0b;
+    --accent4: #ef4444;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    --radius: 8px;
+    --radius-lg: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,15,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 60px;
+  }
+
+  .nav-logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; flex-shrink: 0; }
+  .nav-logo span { color: var(--text2); font-weight: 400; }
+
+  .nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; flex: 1; }
+  .nav-links a {
+    color: var(--text2); text-decoration: none; font-size: 0.8rem;
+    padding: 5px 12px; border-radius: 20px; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { background: var(--bg3); color: var(--accent); }
+
+  .nav-badge {
+    display: flex; gap: 0.5rem; flex-shrink: 0;
+  }
+  .badge {
+    font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    border: 1px solid;
+  }
+  .badge.java { background: #1a1000; color: var(--accent3); border-color: var(--accent3); }
+  .badge.pw { background: #0f1a00; color: #a3e635; border-color: #a3e635; }
+  .badge.api { background: #0a1628; color: var(--info); border-color: var(--info); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, #0b0f1a 0%, #111827 50%, #0d1930 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(0,212,170,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(99,102,241,0.06) 0%, transparent 60%);
+  }
+  .hero-content { position: relative; }
+  .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { color: var(--text2); font-size: 1rem; max-width: 600px; margin: 0 auto 1.5rem; }
+
+  .hero-tags { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+  .hero-tag {
+    padding: 6px 16px; border-radius: 20px; font-size: 0.8rem;
+    border: 1px solid var(--border2); background: var(--card);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── SECTION LAYOUT ─── */
+  .section { padding: 2.5rem 2rem; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+  }
+  .section-icon {
+    width: 40px; height: 40px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .icon-teal { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); }
+  .icon-purple { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); }
+  .icon-amber { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
+  .icon-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+  .icon-blue { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); }
+  .icon-green { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); }
+
+  .section-title { font-size: 1.1rem; font-weight: 700; }
+  .section-sub { font-size: 0.8rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+  /* ─── GRID LAYOUTS ─── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.25rem;
+  }
+  .card-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ─── FORM ELEMENTS ─── */
+  label { display: block; font-size: 0.8rem; color: var(--text2); margin-bottom: 5px; }
+  input[type=text], input[type=email], input[type=password], input[type=number],
+  input[type=date], input[type=tel], input[type=url], input[type=search],
+  textarea, select {
+    width: 100%; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 9px 12px;
+    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.88rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+  }
+  input::placeholder, textarea::placeholder { color: var(--text3); }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: var(--bg2); }
+  .form-group { margin-bottom: 1rem; }
+  .form-group:last-child { margin-bottom: 0; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    padding: 9px 20px; border-radius: var(--radius); border: none;
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #00b890; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+  .btn-secondary:hover { background: var(--bg3); border-color: var(--accent); }
+  .btn-danger { background: var(--error); color: #fff; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-warning { background: var(--warning); color: #000; }
+  .btn-warning:hover { background: #d97706; }
+  .btn-info { background: var(--info); color: #fff; }
+  .btn-info:hover { background: #2563eb; }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #059669; }
+  .btn-ghost { background: transparent; color: var(--accent2); border: 1px solid var(--accent2); }
+  .btn-ghost:hover { background: rgba(99,102,241,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+  .btn-lg { padding: 13px 28px; font-size: 0.95rem; }
+  .btn-block { width: 100%; justify-content: center; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+  .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  /* ─── CHECKBOXES & RADIOS ─── */
+  .check-group, .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .check-item, .radio-item {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; font-size: 0.88rem;
+  }
+  input[type=checkbox], input[type=radio] {
+    width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;
+  }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead { background: var(--bg3); }
+  th { padding: 12px 16px; text-align: left; font-weight: 600; color: var(--text2);
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border); }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg3); }
+  tbody tr { transition: background 0.15s; }
+
+  /* ─── BADGES / CHIPS ─── */
+  .chip {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.3px;
+  }
+  .chip-green { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+  .chip-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .chip-amber { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+  .chip-blue { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+  .chip-purple { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); }
+  .chip-teal { background: rgba(0,212,170,0.15); color: var(--accent); border: 1px solid rgba(0,212,170,0.3); }
+  .chip-gray { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+
+  /* ─── ALERTS ─── */
+  .alert {
+    padding: 12px 16px; border-radius: var(--radius);
+    border-left: 3px solid; font-size: 0.88rem; margin-bottom: 0.75rem;
+  }
+  .alert:last-child { margin-bottom: 0; }
+  .alert-success { background: rgba(16,185,129,0.08); border-color: var(--success); color: #6ee7b7; }
+  .alert-error { background: rgba(239,68,68,0.08); border-color: var(--error); color: #fca5a5; }
+  .alert-warning { background: rgba(245,158,11,0.08); border-color: var(--warning); color: #fcd34d; }
+  .alert-info { background: rgba(59,130,246,0.08); border-color: var(--info); color: #93c5fd; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: var(--radius-lg); padding: 1.75rem; width: 90%; max-width: 480px;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+  .modal-title { font-size: 1rem; font-weight: 700; }
+  .modal-close { background: none; border: none; color: var(--text2); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .modal-footer { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem; }
+
+  /* ─── TABS ─── */
+  .tab-nav { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .tab-btn {
+    padding: 10px 20px; background: none; border: none;
+    color: var(--text2); cursor: pointer; font-family: 'Syne', sans-serif;
+    font-size: 0.85rem; font-weight: 600; border-bottom: 2px solid transparent;
+    transition: all 0.2s; margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── ACCORDION ─── */
+  .accordion-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.5rem; overflow: hidden; }
+  .accordion-header {
+    width: 100%; background: var(--card); border: none; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; color: var(--text); font-family: 'Syne', sans-serif;
+    font-size: 0.88rem; font-weight: 600; transition: background 0.15s;
+  }
+  .accordion-header:hover { background: var(--bg3); }
+  .accordion-arrow { color: var(--text2); transition: transform 0.25s; }
+  .accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+  .accordion-body { display: none; padding: 14px 16px; background: var(--bg2); font-size: 0.85rem; color: var(--text2); }
+  .accordion-item.open .accordion-body { display: block; }
+
+  /* ─── SLIDER ─── */
+  input[type=range] {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    border-radius: 2px; background: var(--border2); outline: none; border: none; padding: 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--accent); cursor: pointer;
+  }
+  input[type=range]:focus { box-shadow: none; border: none; }
+
+  /* ─── PROGRESS ─── */
+  .progress-bar { background: var(--border); border-radius: 20px; height: 8px; overflow: hidden; margin: 4px 0 8px; }
+  .progress-fill { height: 100%; border-radius: 20px; transition: width 0.4s ease; }
+  .fill-teal { background: var(--accent); }
+  .fill-purple { background: var(--accent2); }
+  .fill-amber { background: var(--accent3); }
+  .fill-red { background: var(--error); }
+  .fill-blue { background: var(--info); }
+  .fill-green { background: var(--success); }
+
+  /* ─── TOGGLE ─── */
+  .toggle-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .toggle { position: relative; width: 40px; height: 22px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; cursor: pointer;
+    background: var(--border2); border-radius: 22px; transition: 0.2s;
+  }
+  .toggle-slider:before {
+    content: ''; position: absolute; height: 16px; width: 16px;
+    left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+  .toggle-label { font-size: 0.85rem; }
+
+  /* ─── DRAG & DROP ─── */
+  .dropzone {
+    border: 2px dashed var(--border2); border-radius: var(--radius-lg);
+    padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;
+  }
+  .dropzone:hover, .dropzone.drag-over { border-color: var(--accent); background: rgba(0,212,170,0.04); }
+  .dropzone-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .dropzone-text { color: var(--text2); font-size: 0.88rem; }
+  .dropzone-sub { color: var(--text3); font-size: 0.78rem; margin-top: 4px; }
+
+  /* ─── TOAST ─── */
+  #toast-container {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+    display: flex; flex-direction: column; gap: 0.5rem; max-width: 340px;
+  }
+  .toast {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: var(--radius); padding: 12px 16px;
+    font-size: 0.85rem; animation: toastIn 0.3s ease;
+    display: flex; align-items: center; gap: 10px;
+    border-left: 3px solid var(--accent);
+  }
+  .toast.success { border-left-color: var(--success); }
+  .toast.error { border-left-color: var(--error); }
+  .toast.warning { border-left-color: var(--warning); }
+  .toast.info { border-left-color: var(--info); }
+  @keyframes toastIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-tip {
+    display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+    background: var(--bg3); color: var(--text); font-size: 0.75rem;
+    padding: 5px 10px; border-radius: var(--radius); white-space: nowrap;
+    border: 1px solid var(--border2); z-index: 10;
+  }
+  .tooltip-wrap:hover .tooltip-tip { display: block; }
+
+  /* ─── API TESTER ─── */
+  .api-method {
+    display: flex; gap: 0.5rem; margin-bottom: 1rem;
+  }
+  .method-btn {
+    padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg2); color: var(--text2); cursor: pointer; font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace; font-weight: 600; transition: all 0.2s;
+  }
+  .method-btn.active-get { background: rgba(16,185,129,0.15); color: #10b981; border-color: #10b981; }
+  .method-btn.active-post { background: rgba(59,130,246,0.15); color: #3b82f6; border-color: #3b82f6; }
+  .method-btn.active-put { background: rgba(245,158,11,0.15); color: #f59e0b; border-color: #f59e0b; }
+  .method-btn.active-delete { background: rgba(239,68,68,0.15); color: #ef4444; border-color: #ef4444; }
+  .method-btn.active-patch { background: rgba(99,102,241,0.15); color: #818cf8; border-color: #818cf8; }
+
+  .code-block {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    color: var(--text2); overflow-x: auto; white-space: pre; line-height: 1.7;
+    max-height: 200px; overflow-y: auto;
+  }
+
+  /* ─── COUNTDOWN / TIMER ─── */
+  .timer-display {
+    font-family: 'JetBrains Mono', monospace; font-size: 2.5rem;
+    font-weight: 700; color: var(--accent); text-align: center;
+    letter-spacing: 3px; margin: 1rem 0;
+  }
+
+  /* ─── INFINITE SCROLL ─── */
+  .scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  .scroll-item { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .scroll-item:last-child { border-bottom: none; }
+  .scroll-loader { text-align: center; padding: 10px; color: var(--text3); font-size: 0.78rem; }
+
+  /* ─── PAGINATION ─── */
+  .pagination { display: flex; gap: 4px; justify-content: center; }
+  .page-btn {
+    width: 34px; height: 34px; border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text2); cursor: pointer; font-size: 0.82rem;
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .page-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ─── FRAMES ─── */
+  iframe { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg2); }
+
+  /* ─── HORIZONTAL RULE ─── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+  /* ─── SEARCH ─── */
+  .search-wrap { position: relative; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 0.9rem; }
+  .search-wrap input { padding-left: 36px; }
+  #search-results { margin-top: 0.75rem; }
+  .search-result-item { padding: 10px 12px; background: var(--bg3); border-radius: var(--radius); margin-bottom: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+  .search-result-item em { background: rgba(0,212,170,0.2); color: var(--accent); font-style: normal; border-radius: 3px; padding: 0 3px; }
+
+  /* ─── COUNTER ─── */
+  .counter-display {
+    font-size: 3rem; font-weight: 800; text-align: center; color: var(--accent);
+    font-family: 'JetBrains Mono', monospace; margin: 1rem 0;
+  }
+
+  /* ─── MISC ─── */
+  .visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+  .text-muted { color: var(--text2); }
+  .text-sm { font-size: 0.82rem; }
+  .mt-1 { margin-top: 0.5rem; }
+  .mt-2 { margin-top: 1rem; }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .gap-1 { gap: 0.5rem; }
+  .gap-2 { gap: 1rem; }
+  .w-full { width: 100%; }
+  .justify-between { justify-content: space-between; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* ─── IMAGE GALLERY ─── */
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .gallery-img {
+    aspect-ratio: 1; border-radius: var(--radius); overflow: hidden;
+    border: 2px solid transparent; cursor: pointer; transition: all 0.2s;
+    background: var(--bg3);
+    display: flex; align-items: center; justify-content: center; font-size: 2rem;
+  }
+  .gallery-img:hover { border-color: var(--accent); }
+  .gallery-img.selected { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,170,0.3); }
+
+  /* ─── STEPPER ─── */
+  .stepper { display: flex; align-items: center; gap: 0; }
+  .step { display: flex; align-items: center; gap: 0.5rem; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border2);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem;
+    font-weight: 700; color: var(--text2); transition: all 0.2s;
+  }
+  .step.done .step-num { background: var(--success); border-color: var(--success); color: #fff; }
+  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #000; }
+  .step-label { font-size: 0.78rem; color: var(--text2); }
+  .step.active .step-label { color: var(--text); font-weight: 600; }
+  .step-line { flex: 1; height: 2px; background: var(--border); min-width: 30px; }
+  .step-line.done { background: var(--success); }
+
+  /* SORT TABLE */
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--accent); }
+  th.sorted-asc::after { content: ' ▲'; font-size: 0.65rem; }
+  th.sorted-desc::after { content: ' ▼'; font-size: 0.65rem; }
+
+  /* ─── FLOATING LABEL ─── */
+  .float-label { position: relative; margin-bottom: 1rem; }
+  .float-label input { padding-top: 18px; }
+  .float-label label {
+    position: absolute; top: 10px; left: 13px; font-size: 0.82rem;
+    color: var(--text3); transition: all 0.15s; pointer-events: none; margin: 0;
+  }
+  .float-label input:focus + label,
+  .float-label input:not(:placeholder-shown) + label {
+    top: 4px; font-size: 0.68rem; color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 1.5rem; }
+    .section { padding: 1.5rem 1rem; }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    .stepper { flex-wrap: wrap; gap: 0.5rem; }
+    .step-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="myModal">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Confirm Action</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p class="text-muted text-sm" id="modal-body">Are you sure you want to proceed with this action? This cannot be undone.</p>
+    <div class="form-group mt-2">
+      <label>Enter reason (optional)</label>
+      <input type="text" id="modal-input" placeholder="Type reason..." data-testid="modal-reason-input">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()" data-testid="modal-cancel">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmModal()" data-testid="modal-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Auto<span>Test</span> Playground</div>
+  <div class="nav-links">
+    <a href="#forms">Forms</a>
+    <a href="#tables">Tables</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#modals">Modals</a>
+    <a href="#alerts">Alerts</a>
+    <a href="#tabs">Tabs</a>
+    <a href="#api">API</a>
+    <a href="#waits">Waits</a>
+    <a href="#frames">Frames</a>
+    <a href="#advanced">Advanced</a>
+  </div>
+  <div class="nav-badge">
+    <span class="badge java">Java · Selenium</span>
+    <span class="badge pw">Playwright JS</span>
+    <span class="badge api">REST API</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Automation Testing <em>Playground</em></h1>
+    <p>A complete sandbox with every web element you need to practice Selenium, Playwright, and REST API automation testing.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Forms &amp; Inputs</span>
+      <span class="hero-tag">Tables &amp; Grids</span>
+      <span class="hero-tag">Modals &amp; Alerts</span>
+      <span class="hero-tag">Drag &amp; Drop</span>
+      <span class="hero-tag">File Upload</span>
+      <span class="hero-tag">iFrames</span>
+      <span class="hero-tag">Dynamic Content</span>
+      <span class="hero-tag">Waits &amp; Delays</span>
+      <span class="hero-tag">REST API Mock</span>
+      <span class="hero-tag">Infinite Scroll</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 1 — FORMS                         -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="forms">
+  <div class="section-header">
+    <div class="section-icon icon-teal">📝</div>
+    <div>
+      <div class="section-title">Forms &amp; Input Elements</div>
+      <div class="section-sub">selenium: findElement, sendKeys, clear, submit · playwright: fill, type, check, selectOption</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- LOGIN FORM -->
+    <div class="card">
+      <div class="card-title">Login Form</div>
+      <form id="login-form" data-testid="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" data-testid="username-input"
+            placeholder="admin" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" data-testid="password-input"
+            placeholder="password123">
+        </div>
+        <div class="form-group">
+          <label class="check-item">
+            <input type="checkbox" id="remember-me" data-testid="remember-checkbox">
+            Remember me
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" data-testid="login-btn">Login</button>
+        <div id="login-msg" class="mt-1"></div>
+      </form>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div class="card">
+      <div class="card-title">Registration Form</div>
+      <form id="reg-form" data-testid="reg-form" onsubmit="handleReg(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" data-testid="fname-input" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name *</label>
+            <input type="text" id="lname" data-testid="lname-input" placeholder="Doe" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" data-testid="email-input" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" data-testid="phone-input" placeholder="+91 9876543210">
+        </div>
+        <div class="form-group">
+          <label for="country">Country</label>
+          <select id="country" data-testid="country-select">
+            <option value="">-- Select Country --</option>
+            <option value="in">India</option>
+            <option value="us">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="au">Australia</option>
+            <option value="ca">Canada</option>
+            <option value="de">Germany</option>
+            <option value="jp">Japan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" data-testid="dob-input">
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" data-testid="bio-input" placeholder="Tell us about yourself..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" data-testid="reg-submit-btn">Register</button>
+        <div id="reg-msg" class="mt-1"></div>
+      </form>
+    </div>
+
+    <!-- CHECKBOXES, RADIOS, TOGGLES -->
+    <div class="card">
+      <div class="card-title">Checkboxes, Radios &amp; Toggles</div>
+
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Checkboxes (multi-select)</p>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" id="chk-selenium" data-testid="chk-selenium" checked> Java Selenium</label>
+        <label class="check-item"><input type="checkbox" id="chk-playwright" data-testid="chk-playwright"> Playwright JS</label>
+        <label class="check-item"><input type="checkbox" id="chk-rest" data-testid="chk-rest"> REST Assured</label>
+        <label class="check-item"><input type="checkbox" id="chk-testng" data-testid="chk-testng"> TestNG</label>
+        <label class="check-item"><input type="checkbox" id="chk-cucumber" data-testid="chk-cucumber" disabled> Cucumber (disabled)</label>
+      </div>
+
+      <hr class="divider">
+
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Radio Buttons</p>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="framework" value="selenium" data-testid="radio-selenium" checked> Selenium WebDriver</label>
+        <label class="radio-item"><input type="radio" name="framework" value="playwright" data-testid="radio-playwright"> Playwright</label>
+        <label class="radio-item"><input type="radio" name="framework" value="cypress" data-testid="radio-cypress"> Cypress</label>
+        <label class="radio-item"><input type="radio" name="framework" value="webdriverio" data-testid="radio-webdriverio"> WebDriverIO</label>
+      </div>
+
+      <hr class="divider">
+
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Toggle Switches</p>
+      <div class="toggle-wrap">
+        <label class="toggle"><input type="checkbox" id="toggle-dark" data-testid="toggle-dark" checked><span class="toggle-slider"></span></label>
+        <span class="toggle-label">Dark Mode</span>
+      </div>
+      <div class="toggle-wrap">
+        <label class="toggle"><input type="checkbox" id="toggle-notif" data-testid="toggle-notifications"><span class="toggle-slider"></span></label>
+        <span class="toggle-label">Notifications</span>
+      </div>
+      <div class="toggle-wrap">
+        <label class="toggle"><input type="checkbox" id="toggle-2fa" data-testid="toggle-2fa"><span class="toggle-slider"></span></label>
+        <span class="toggle-label">Two-Factor Auth</span>
+      </div>
+    </div>
+
+    <!-- SPECIAL INPUTS -->
+    <div class="card">
+      <div class="card-title">Special Inputs &amp; Controls</div>
+
+      <div class="form-group">
+        <label for="range-input">Range Slider: <span id="range-val">50</span></label>
+        <input type="range" id="range-input" data-testid="range-slider" min="0" max="100" value="50"
+          oninput="document.getElementById('range-val').textContent=this.value">
+      </div>
+
+      <div class="form-group">
+        <label for="num-input">Number Input</label>
+        <input type="number" id="num-input" data-testid="number-input" min="1" max="100" value="1">
+      </div>
+
+      <div class="form-group">
+        <label for="color-input">Color Picker</label>
+        <input type="color" id="color-input" data-testid="color-input" value="#00d4aa"
+          style="width:100%; height:42px; padding:2px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg2); cursor:pointer;">
+      </div>
+
+      <div class="form-group">
+        <label for="url-input">URL Input</label>
+        <input type="url" id="url-input" data-testid="url-input" placeholder="https://example.com">
+      </div>
+
+      <div class="form-group">
+        <label for="multiselect">Multi-Select (hold Ctrl/Cmd)</label>
+        <select id="multiselect" data-testid="multi-select" multiple style="height:100px;">
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="safari">Safari</option>
+          <option value="edge">Edge</option>
+          <option value="opera">Opera</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="datalist-input">Datalist (Autocomplete)</label>
+        <input type="text" id="datalist-input" data-testid="datalist-input" list="frameworks-list" placeholder="Type a framework...">
+        <datalist id="frameworks-list">
+          <option value="Selenium">
+          <option value="Playwright">
+          <option value="Cypress">
+          <option value="RestAssured">
+          <option value="Appium">
+          <option value="TestNG">
+          <option value="JUnit">
+        </datalist>
+      </div>
+
+      <!-- Floating Label -->
+      <div class="float-label">
+        <input type="text" id="float-input" data-testid="float-label-input" placeholder=" ">
+        <label for="float-input">Floating Label Field</label>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 2 — BUTTONS                       -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="buttons">
+  <div class="section-header">
+    <div class="section-icon icon-purple">🔘</div>
+    <div>
+      <div class="section-title">Buttons &amp; Actions</div>
+      <div class="section-sub">selenium: click, doubleClick, rightClick · playwright: click, dblclick, dispatchEvent</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Button Variants</div>
+      <div class="btn-group" style="margin-bottom:1rem;">
+        <button class="btn btn-primary" data-testid="btn-primary" onclick="toast('Primary clicked!','success')">Primary</button>
+        <button class="btn btn-secondary" data-testid="btn-secondary" onclick="toast('Secondary clicked!','info')">Secondary</button>
+        <button class="btn btn-danger" data-testid="btn-danger" onclick="toast('Danger!','error')">Danger</button>
+        <button class="btn btn-warning" data-testid="btn-warning" onclick="toast('Warning!','warning')">Warning</button>
+        <button class="btn btn-success" data-testid="btn-success" onclick="toast('Success!','success')">Success</button>
+        <button class="btn btn-info" data-testid="btn-info" onclick="toast('Info!','info')">Info</button>
+        <button class="btn btn-ghost" data-testid="btn-ghost">Ghost</button>
+      </div>
+      <div class="btn-group" style="margin-bottom:1rem;">
+        <button class="btn btn-primary btn-sm" data-testid="btn-sm">Small</button>
+        <button class="btn btn-primary" data-testid="btn-md">Medium</button>
+        <button class="btn btn-primary btn-lg" data-testid="btn-lg">Large</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" data-testid="btn-disabled" disabled>Disabled</button>
+        <button class="btn btn-secondary" data-testid="btn-loading" onclick="simulateLoading(this)">Click to Load</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Click Events</div>
+      <p class="text-sm text-muted" style="margin-bottom:1rem;">Test various mouse interactions</p>
+
+      <div class="btn-group" style="margin-bottom:1rem;">
+        <button class="btn btn-secondary" id="double-click-btn" data-testid="dbl-click-btn"
+          ondblclick="document.getElementById('click-log').textContent='Double-click registered! ✓'">
+          Double-Click Me
+        </button>
+
+        <button class="btn btn-secondary" id="right-click-btn" data-testid="right-click-btn"
+          oncontextmenu="event.preventDefault(); document.getElementById('click-log').textContent='Right-click registered! ✓'">
+          Right-Click Me
+        </button>
+
+        <button class="btn btn-secondary" data-testid="hover-btn"
+          onmouseenter="document.getElementById('click-log').textContent='Mouse entered! ✓'"
+          onmouseleave="document.getElementById('click-log').textContent='Mouse left! ✓'">
+          Hover Me
+        </button>
+      </div>
+
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--accent);" id="click-log">
+        Waiting for interaction...
+      </div>
+
+      <hr class="divider">
+      <div class="card-title">Counter (Increment Test)</div>
+      <div class="counter-display" id="counter-val">0</div>
+      <div class="btn-group" style="justify-content:center;">
+        <button class="btn btn-secondary btn-sm" data-testid="counter-dec" onclick="changeCounter(-1)">− Decrement</button>
+        <button class="btn btn-primary btn-sm" data-testid="counter-inc" onclick="changeCounter(1)">+ Increment</button>
+        <button class="btn btn-danger btn-sm" data-testid="counter-reset" onclick="changeCounter(0,'reset')">Reset</button>
+      </div>
+    </div>
+
+    <!-- TOOLTIP DEMO -->
+    <div class="card">
+      <div class="card-title">Tooltips &amp; Hover States</div>
+      <div class="btn-group" style="margin-bottom:1rem;">
+        <div class="tooltip-wrap">
+          <button class="btn btn-secondary" data-testid="tooltip-btn-1">Hover: Top Tooltip</button>
+          <span class="tooltip-tip">I'm a tooltip!</span>
+        </div>
+        <div class="tooltip-wrap">
+          <button class="btn btn-secondary" data-testid="tooltip-btn-2">Hover: Info</button>
+          <span class="tooltip-tip">Selenium: Actions().moveToElement()</span>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="card-title">Dynamic Button</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Button appears after 2 seconds</p>
+      <button class="btn btn-warning btn-sm" data-testid="trigger-dynamic-btn" onclick="showDynamicBtn()">Trigger Dynamic Button</button>
+      <div id="dynamic-btn-container" style="margin-top:0.75rem; min-height:36px;"></div>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="card">
+      <div class="card-title">Multi-Step Form (Stepper)</div>
+      <div class="stepper" id="stepper" style="margin-bottom:1.5rem;">
+        <div class="step done" id="step-1"><div class="step-num">✓</div><span class="step-label">Account</span></div>
+        <div class="step-line done"></div>
+        <div class="step active" id="step-2"><div class="step-num">2</div><span class="step-label">Profile</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Review</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Done</span></div>
+      </div>
+      <div class="form-group">
+        <label>Profile Bio</label>
+        <textarea data-testid="step-bio" placeholder="Enter your bio for step 2..." style="min-height:60px;"></textarea>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-sm" data-testid="step-back" onclick="toast('Went back to Account','info')">← Back</button>
+        <button class="btn btn-primary btn-sm" data-testid="step-next" onclick="advanceStepper()">Next →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 3 — TABLES                        -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="tables">
+  <div class="section-header">
+    <div class="section-icon icon-amber">📊</div>
+    <div>
+      <div class="section-title">Tables &amp; Data Grids</div>
+      <div class="section-sub">selenium: findElements, xpath, cssSelector · playwright: locator, getByRole</div>
+    </div>
+  </div>
+
+  <!-- Search + Filter -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-bottom:1rem;">
+      <div class="search-wrap" style="flex:1; min-width:200px;">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="table-search" data-testid="table-search" placeholder="Filter users..." oninput="filterTable()">
+      </div>
+      <select id="status-filter" data-testid="status-filter" onchange="filterTable()" style="width:auto; min-width:140px;">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="pending">Pending</option>
+      </select>
+      <button class="btn btn-primary btn-sm" data-testid="add-row-btn" onclick="addTableRow()">+ Add Row</button>
+      <button class="btn btn-secondary btn-sm" data-testid="reset-table-btn" onclick="resetTable()">Reset</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="data-table" data-testid="data-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)"></th>
+            <th class="sortable" onclick="sortTable(1)" data-testid="th-id">ID</th>
+            <th class="sortable" onclick="sortTable(2)" data-testid="th-name">Name</th>
+            <th class="sortable" onclick="sortTable(3)" data-testid="th-email">Email</th>
+            <th class="sortable" onclick="sortTable(4)" data-testid="th-role">Role</th>
+            <th class="sortable" onclick="sortTable(5)" data-testid="th-status">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; flex-wrap:wrap; gap:0.75rem;">
+      <span class="text-sm text-muted" id="table-count">Showing 0 of 0 records</span>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 4 — MODALS & DIALOGS              -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="modals">
+  <div class="section-header">
+    <div class="section-icon icon-blue">💬</div>
+    <div>
+      <div class="section-title">Modals, Dialogs &amp; Overlays</div>
+      <div class="section-sub">selenium: switchTo().alert() · playwright: page.on('dialog') waitForSelector</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Modal Dialogs</div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-sm" data-testid="open-modal-btn" onclick="openModal('Confirm Action','Are you sure you want to delete this record?')">
+          Open Custom Modal
+        </button>
+        <button class="btn btn-warning btn-sm" data-testid="js-alert-btn" onclick="alert('This is a JavaScript Alert!')">
+          JS alert()
+        </button>
+        <button class="btn btn-info btn-sm" data-testid="js-confirm-btn" onclick="handleConfirm()">
+          JS confirm()
+        </button>
+        <button class="btn btn-secondary btn-sm" data-testid="js-prompt-btn" onclick="handlePrompt()">
+          JS prompt()
+        </button>
+      </div>
+      <div id="dialog-result" class="mt-2"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Alerts &amp; Notifications</div>
+      <div id="alerts-container">
+        <div class="alert alert-success" data-testid="alert-success" id="alert-success">
+          ✓ Operation completed successfully. Data saved to database.
+        </div>
+        <div class="alert alert-error" data-testid="alert-error" id="alert-error">
+          ✕ Error: Unable to connect to server. Please retry.
+        </div>
+        <div class="alert alert-warning" data-testid="alert-warning" id="alert-warning">
+          ⚠ Warning: Your session will expire in 5 minutes.
+        </div>
+        <div class="alert alert-info" data-testid="alert-info" id="alert-info">
+          ℹ Info: New updates available. Click to refresh.
+        </div>
+      </div>
+      <div class="btn-group mt-2">
+        <button class="btn btn-success btn-sm" data-testid="show-toast-success" onclick="toast('Success notification!','success')">Toast Success</button>
+        <button class="btn btn-danger btn-sm" data-testid="show-toast-error" onclick="toast('Error occurred!','error')">Toast Error</button>
+        <button class="btn btn-warning btn-sm" data-testid="show-toast-warn" onclick="toast('Warning!','warning')">Toast Warning</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 5 — TABS & ACCORDION              -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="tabs">
+  <div class="section-header">
+    <div class="section-icon icon-green">🗂️</div>
+    <div>
+      <div class="section-title">Tabs, Accordion &amp; Navigation</div>
+      <div class="section-sub">selenium: click tab, verify content · playwright: getByRole('tab')</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Tab Component</div>
+      <div class="tab-nav" id="tab-nav" data-testid="tab-nav">
+        <button class="tab-btn active" data-testid="tab-overview" onclick="switchTab('overview', this)">Overview</button>
+        <button class="tab-btn" data-testid="tab-selenium" onclick="switchTab('selenium', this)">Selenium</button>
+        <button class="tab-btn" data-testid="tab-playwright" onclick="switchTab('playwright', this)">Playwright</button>
+        <button class="tab-btn" data-testid="tab-api" onclick="switchTab('api-tab', this)">REST API</button>
+      </div>
+      <div id="tab-overview" class="tab-panel active" data-testid="tab-panel-overview">
+        <p class="text-sm text-muted">This playground covers all automation testing scenarios. Switch tabs to see tool-specific content.</p>
+        <div class="btn-group mt-2">
+          <span class="chip chip-green">Java 17+</span>
+          <span class="chip chip-blue">Selenium 4</span>
+          <span class="chip chip-purple">TestNG</span>
+          <span class="chip chip-amber">Maven/Gradle</span>
+        </div>
+      </div>
+      <div id="tab-selenium" class="tab-panel" data-testid="tab-panel-selenium">
+        <div class="code-block">driver.findElement(By.id("username"))
+  .sendKeys("admin");
+driver.findElement(By.testId("login-btn"))
+  .click();
+WebDriverWait wait = new WebDriverWait(driver, 10);
+wait.until(ExpectedConditions
+  .visibilityOfElementLocated(By.id("msg")));</div>
+      </div>
+      <div id="tab-playwright" class="tab-panel" data-testid="tab-panel-playwright">
+        <div class="code-block">await page.fill('[data-testid="username-input"]', 'admin');
+await page.fill('[data-testid="password-input"]', 'pass');
+await page.click('[data-testid="login-btn"]');
+await expect(page.locator('#login-msg'))
+  .toBeVisible();</div>
+      </div>
+      <div id="tab-api-tab" class="tab-panel" data-testid="tab-panel-api">
+        <div class="code-block">given()
+  .contentType(ContentType.JSON)
+  .body(payload)
+.when()
+  .post("/api/users")
+.then()
+  .statusCode(201)
+  .body("id", notNullValue());</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Accordion / Collapsible</div>
+      <div id="accordion" data-testid="accordion">
+        <div class="accordion-item open" data-testid="accordion-item-1">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            What is Selenium WebDriver? <span class="accordion-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            Selenium WebDriver is an open-source automation framework for web browsers. It allows you to write tests in Java, Python, C#, and other languages to interact with web elements.
+          </div>
+        </div>
+        <div class="accordion-item" data-testid="accordion-item-2">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            What is Playwright? <span class="accordion-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            Playwright is a modern end-to-end testing framework by Microsoft. It supports Chromium, Firefox, and WebKit and provides auto-wait capabilities, intercepting network requests, and more.
+          </div>
+        </div>
+        <div class="accordion-item" data-testid="accordion-item-3">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            What is REST API Testing? <span class="accordion-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            REST API testing validates HTTP endpoints by sending GET, POST, PUT, DELETE requests and verifying responses. Tools include REST Assured (Java), Axios, and Supertest.
+          </div>
+        </div>
+        <div class="accordion-item" data-testid="accordion-item-4">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            Page Object Model (POM) <span class="accordion-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            POM is a design pattern that creates an object repository for web elements. Each page is represented as a class with elements as fields and actions as methods.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 6 — API TESTER                    -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="api">
+  <div class="section-header">
+    <div class="section-icon icon-blue">⚡</div>
+    <div>
+      <div class="section-title">REST API Mock Tester</div>
+      <div class="section-sub">test GET POST PUT DELETE PATCH · intercept network · validate responses</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Request Builder</div>
+      <div class="api-method" id="api-methods">
+        <button class="method-btn active-get" data-method="GET" data-testid="method-get" onclick="setMethod('GET')">GET</button>
+        <button class="method-btn" data-method="POST" data-testid="method-post" onclick="setMethod('POST')">POST</button>
+        <button class="method-btn" data-method="PUT" data-testid="method-put" onclick="setMethod('PUT')">PUT</button>
+        <button class="method-btn" data-method="DELETE" data-testid="method-delete" onclick="setMethod('DELETE')">DELETE</button>
+        <button class="method-btn" data-method="PATCH" data-testid="method-patch" onclick="setMethod('PATCH')">PATCH</button>
+      </div>
+
+      <div class="form-group">
+        <label>Endpoint URL</label>
+        <input type="url" id="api-url" data-testid="api-url-input" value="https://jsonplaceholder.typicode.com/users/1">
+      </div>
+
+      <div class="form-group">
+        <label>Request Headers (JSON)</label>
+        <textarea id="api-headers" data-testid="api-headers" style="min-height:60px; font-family:JetBrains Mono,monospace; font-size:0.78rem;">{"Content-Type": "application/json", "Accept": "application/json"}</textarea>
+      </div>
+
+      <div class="form-group" id="api-body-group">
+        <label>Request Body (JSON)</label>
+        <textarea id="api-body" data-testid="api-body" style="min-height:80px; font-family:JetBrains Mono,monospace; font-size:0.78rem;">{"name": "Test User", "email": "test@example.com"}</textarea>
+      </div>
+
+      <button class="btn btn-primary btn-block" data-testid="send-request-btn" onclick="sendApiRequest()">▶ Send Request</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Response</div>
+      <div style="display:flex; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap;">
+        <div style="flex:1; min-width:100px;">
+          <div class="text-sm text-muted" style="margin-bottom:4px;">Status</div>
+          <span id="api-status" data-testid="api-status" class="chip chip-gray">—</span>
+        </div>
+        <div style="flex:1; min-width:100px;">
+          <div class="text-sm text-muted" style="margin-bottom:4px;">Time</div>
+          <span id="api-time" data-testid="api-time" class="chip chip-gray">—</span>
+        </div>
+        <div style="flex:1; min-width:100px;">
+          <div class="text-sm text-muted" style="margin-bottom:4px;">Size</div>
+          <span id="api-size" data-testid="api-size" class="chip chip-gray">—</span>
+        </div>
+      </div>
+      <div class="code-block" id="api-response" data-testid="api-response" style="max-height:280px;">
+// Response will appear here...
+// Click "Send Request" to make an API call
+      </div>
+    </div>
+
+    <!-- MOCK ENDPOINTS -->
+    <div class="card">
+      <div class="card-title">Mock API Endpoints</div>
+      <p class="text-sm text-muted" style="margin-bottom:1rem;">Click endpoints to auto-fill the request builder</p>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <div class="search-result-item" style="cursor:pointer; justify-content:space-between;" data-testid="mock-get-users" onclick="fillEndpoint('GET','https://jsonplaceholder.typicode.com/users')">
+          <div><span class="chip chip-green" style="margin-right:8px;">GET</span>/api/users</div>
+          <span class="text-sm text-muted">→ array of users</span>
+        </div>
+        <div class="search-result-item" style="cursor:pointer; justify-content:space-between;" data-testid="mock-post-user" onclick="fillEndpoint('POST','https://jsonplaceholder.typicode.com/users')">
+          <div><span class="chip chip-blue" style="margin-right:8px;">POST</span>/api/users</div>
+          <span class="text-sm text-muted">→ create user</span>
+        </div>
+        <div class="search-result-item" style="cursor:pointer; justify-content:space-between;" data-testid="mock-put-user" onclick="fillEndpoint('PUT','https://jsonplaceholder.typicode.com/users/1')">
+          <div><span class="chip chip-amber" style="margin-right:8px;">PUT</span>/api/users/1</div>
+          <span class="text-sm text-muted">→ update user</span>
+        </div>
+        <div class="search-result-item" style="cursor:pointer; justify-content:space-between;" data-testid="mock-delete-user" onclick="fillEndpoint('DELETE','https://jsonplaceholder.typicode.com/users/1')">
+          <div><span class="chip chip-red" style="margin-right:8px;">DELETE</span>/api/users/1</div>
+          <span class="text-sm text-muted">→ delete user</span>
+        </div>
+        <div class="search-result-item" style="cursor:pointer; justify-content:space-between;" data-testid="mock-get-posts" onclick="fillEndpoint('GET','https://jsonplaceholder.typicode.com/posts?_limit=5')">
+          <div><span class="chip chip-green" style="margin-right:8px;">GET</span>/api/posts</div>
+          <span class="text-sm text-muted">→ array of posts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSERTIONS PANEL -->
+    <div class="card">
+      <div class="card-title">Response Assertions</div>
+      <div class="form-group">
+        <label>Assert Status Code equals</label>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="number" id="assert-status" data-testid="assert-status-input" value="200" style="width:100px;">
+          <button class="btn btn-secondary btn-sm" data-testid="run-assert-btn" onclick="runAssertions()">Run Assertion</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Assert Body contains (key path)</label>
+        <input type="text" id="assert-key" data-testid="assert-key-input" placeholder="e.g. id, name, email">
+      </div>
+      <div id="assertion-results" data-testid="assertion-results"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 7 — WAITS & DYNAMIC CONTENT       -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="waits">
+  <div class="section-header">
+    <div class="section-icon icon-red">⏱️</div>
+    <div>
+      <div class="section-title">Waits, Delays &amp; Dynamic Content</div>
+      <div class="section-sub">selenium: WebDriverWait, FluentWait · playwright: waitForSelector, waitForResponse</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Delayed Element Visibility</div>
+      <div class="grid-3" style="margin-bottom:1rem;">
+        <button class="btn btn-secondary btn-sm" data-testid="show-after-1s" onclick="showAfter(1000,'delayed-1')">Show after 1s</button>
+        <button class="btn btn-secondary btn-sm" data-testid="show-after-3s" onclick="showAfter(3000,'delayed-2')">Show after 3s</button>
+        <button class="btn btn-secondary btn-sm" data-testid="show-after-5s" onclick="showAfter(5000,'delayed-3')">Show after 5s</button>
+      </div>
+      <div id="delayed-1" data-testid="delayed-element-1" style="display:none;" class="alert alert-success">Element 1 appeared! (1s wait)</div>
+      <div id="delayed-2" data-testid="delayed-element-2" style="display:none;" class="alert alert-info">Element 2 appeared! (3s wait)</div>
+      <div id="delayed-3" data-testid="delayed-element-3" style="display:none;" class="alert alert-warning">Element 3 appeared! (5s wait)</div>
+      <hr class="divider">
+      <div class="card-title">Progress / Loading Simulation</div>
+      <button class="btn btn-primary btn-sm" data-testid="start-progress-btn" onclick="startProgress()">Start Loading</button>
+      <div id="progress-wrap" style="display:none; margin-top:1rem;">
+        <div class="progress-bar"><div class="progress-fill fill-teal" id="progress-fill" style="width:0%"></div></div>
+        <div class="text-sm text-muted" id="progress-text" style="text-align:right; margin-top:4px;">0%</div>
+        <div id="progress-done" data-testid="progress-complete" style="display:none;" class="alert alert-success mt-1">Loading complete! ✓</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Countdown Timer</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.5rem;">Useful for testing time-sensitive elements</p>
+      <div class="timer-display" id="timer-display" data-testid="timer-display">00:30</div>
+      <div class="btn-group" style="justify-content:center; margin-bottom:1rem;">
+        <button class="btn btn-success btn-sm" data-testid="timer-start" onclick="timerAction('start')">▶ Start</button>
+        <button class="btn btn-warning btn-sm" data-testid="timer-pause" onclick="timerAction('pause')">⏸ Pause</button>
+        <button class="btn btn-secondary btn-sm" data-testid="timer-reset" onclick="timerAction('reset')">↺ Reset</button>
+      </div>
+      <div id="timer-msg" data-testid="timer-complete-msg"></div>
+
+      <hr class="divider">
+      <div class="card-title">Auto-Refreshing Content</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Content updates every 5 seconds</p>
+      <div id="live-data" data-testid="live-data" style="font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--accent);"></div>
+      <div class="text-sm text-muted mt-1" id="last-updated"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Search with Debounce</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Results appear after 600ms typing pause</p>
+      <div class="form-group">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="debounce-search" data-testid="debounce-search" placeholder="Search users..." oninput="debounceSearch(this.value)">
+        </div>
+      </div>
+      <div id="search-results" data-testid="search-results">
+        <p class="text-sm text-muted">Type to search...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Infinite Scroll List</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Scroll down to load more items</p>
+      <div class="scroll-list" id="infinite-list" data-testid="infinite-list" onscroll="checkScroll(this)"></div>
+      <div id="scroll-info" class="text-sm text-muted mt-1">Loaded: <span id="scroll-count">0</span> items</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 8 — IFRAMES                       -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="frames">
+  <div class="section-header">
+    <div class="section-icon icon-purple">🖼️</div>
+    <div>
+      <div class="section-title">iFrames &amp; Nested Contexts</div>
+      <div class="section-sub">selenium: driver.switchTo().frame() · playwright: frameLocator()</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Embedded iFrame</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Switch into this frame to interact with its elements</p>
+      <iframe
+        id="practice-frame"
+        data-testid="practice-iframe"
+        srcdoc="<html><body style='margin:0; padding:16px; background:#111827; font-family:sans-serif; color:#e2e8f0;'>
+          <h3 style='color:#00d4aa; margin:0 0 12px; font-size:14px;'>You are inside an iFrame!</h3>
+          <input type='text' id='iframe-input' placeholder='Type inside frame...' style='width:100%; padding:8px; background:#0b0f1a; border:1px solid #2a3550; border-radius:6px; color:#e2e8f0; margin-bottom:8px; box-sizing:border-box;'>
+          <button onclick='document.getElementById(\"iframe-msg\").textContent=\"Button clicked inside frame!\"' style='padding:7px 16px; background:#00d4aa; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#000; font-size:13px;'>Click Inside Frame</button>
+          <p id='iframe-msg' style='margin-top:10px; font-size:13px; color:#94a3b8;'></p>
+        </body></html>"
+        width="100%" height="160" style="border-radius:var(--radius-lg);">
+      </iframe>
+      <div class="code-block" style="margin-top:0.75rem; max-height:80px;">// Selenium:
+driver.switchTo().frame("practice-frame");
+driver.switchTo().defaultContent();</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Nested iFrame</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Frame within a frame — test deep switching</p>
+      <iframe
+        id="outer-frame"
+        data-testid="outer-iframe"
+        srcdoc="<html><body style='margin:0; padding:12px; background:#111827; font-family:sans-serif; color:#e2e8f0;'>
+          <p style='font-size:13px; color:#94a3b8; margin:0 0 8px;'>Outer Frame</p>
+          <iframe srcdoc='<html><body style=margin:0;padding:12px;background:#0b0f1a;font-family:sans-serif;color:#e2e8f0;><p style=font-size:12px;color:#00d4aa;>Inner Frame!</p><input type=text placeholder=Inner frame input style=padding:6px;background:#111827;border:1px solid #2a3550;border-radius:4px;color:#e2e8f0;width:100%;box-sizing:border-box;></body></html>' width=100% height=80 style=border:1px dashed #2a3550;border-radius:6px;></iframe>
+        </body></html>"
+        width="100%" height="140" style="border-radius:var(--radius-lg);">
+      </iframe>
+      <div class="code-block" style="margin-top:0.75rem; max-height:80px;">// Playwright:
+const frame = page.frameLocator('#outer-frame')
+  .frameLocator('iframe');
+await frame.locator('input').fill('text');</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SECTION 9 — ADVANCED ELEMENTS             -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="section" id="advanced">
+  <div class="section-header">
+    <div class="section-icon icon-teal">🚀</div>
+    <div>
+      <div class="section-title">Advanced Elements</div>
+      <div class="section-sub">drag-drop · file upload · shadow DOM · broken links · context menus · keyboard shortcuts</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- DRAG & DROP -->
+    <div class="card">
+      <div class="card-title">Drag &amp; Drop</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Drag items between lists</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div>
+          <div class="text-sm text-muted" style="margin-bottom:6px;">Source</div>
+          <div id="drag-source" data-testid="drag-source" style="min-height:120px; border:1px dashed var(--border2); border-radius:var(--radius); padding:8px;">
+            <div class="drag-item" draggable="true" data-testid="drag-item-1" ondragstart="dragStart(event)" style="background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:8px 10px; margin-bottom:6px; cursor:grab; font-size:0.82rem;">🔵 Selenium Test</div>
+            <div class="drag-item" draggable="true" data-testid="drag-item-2" ondragstart="dragStart(event)" style="background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:8px 10px; margin-bottom:6px; cursor:grab; font-size:0.82rem;">🟢 Playwright Test</div>
+            <div class="drag-item" draggable="true" data-testid="drag-item-3" ondragstart="dragStart(event)" style="background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:8px 10px; cursor:grab; font-size:0.82rem;">🟡 API Test</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-sm text-muted" style="margin-bottom:6px;">Drop Target</div>
+          <div id="drag-target" data-testid="drag-target"
+            ondragover="event.preventDefault(); this.style.borderColor='var(--accent)'"
+            ondragleave="this.style.borderColor='var(--border2)'"
+            ondrop="dropItem(event)"
+            style="min-height:120px; border:1px dashed var(--border2); border-radius:var(--radius); padding:8px; transition:border-color 0.2s;">
+            <div class="text-sm text-muted" style="text-align:center; padding-top:1rem; color:var(--text3);">Drop here</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILE UPLOAD -->
+    <div class="card">
+      <div class="card-title">File Upload</div>
+      <div class="dropzone" id="dropzone" data-testid="dropzone"
+        ondragover="event.preventDefault(); this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="handleFileDrop(event)"
+        onclick="document.getElementById('file-input').click()">
+        <div class="dropzone-icon">📂</div>
+        <div class="dropzone-text">Drag &amp; drop files here, or click to browse</div>
+        <div class="dropzone-sub">Supports .jpg, .png, .pdf, .csv, .xml</div>
+      </div>
+      <input type="file" id="file-input" data-testid="file-input" style="display:none;" onchange="handleFileSelect(this)" multiple accept=".jpg,.jpeg,.png,.pdf,.csv,.xml,.json,.txt">
+      <div id="file-list" data-testid="file-list" style="margin-top:0.75rem;"></div>
+    </div>
+
+    <!-- CONTEXT MENU & KEYBOARD -->
+    <div class="card">
+      <div class="card-title">Context Menu &amp; Keyboard Events</div>
+      <div id="context-area" data-testid="context-area"
+        style="background:var(--bg2); border:1px dashed var(--border2); border-radius:var(--radius); padding:1.5rem; text-align:center; cursor:context-menu; margin-bottom:1rem; position:relative;"
+        oncontextmenu="showContextMenu(event)">
+        <p class="text-sm text-muted">Right-click here for context menu</p>
+      </div>
+      <div id="custom-context-menu" data-testid="context-menu" style="display:none; position:fixed; background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); z-index:9999; min-width:150px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <div onclick="ctxAction('Copy')" style="padding:10px 16px; font-size:0.85rem; cursor:pointer;" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background='none'">📋 Copy</div>
+        <div onclick="ctxAction('Cut')" style="padding:10px 16px; font-size:0.85rem; cursor:pointer;" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background='none'">✂️ Cut</div>
+        <div onclick="ctxAction('Paste')" style="padding:10px 16px; font-size:0.85rem; cursor:pointer;" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background='none'">📄 Paste</div>
+        <div onclick="ctxAction('Inspect')" style="padding:10px 16px; font-size:0.85rem; cursor:pointer;" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background='none'">🔍 Inspect</div>
+      </div>
+      <div id="ctx-log" class="text-sm text-muted"></div>
+
+      <hr class="divider">
+      <div class="card-title">Keyboard Shortcuts</div>
+      <div style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px;" data-testid="keyboard-area" tabindex="0" onkeydown="logKey(event)" id="key-area">
+        <p class="text-sm text-muted">Click here then press keys (Ctrl+S, Enter, Escape, Tab...)</p>
+      </div>
+      <div id="key-log" data-testid="key-log" style="margin-top:0.5rem; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--accent);"></div>
+    </div>
+
+    <!-- IMAGE GALLERY & SCROLL TO TOP -->
+    <div class="card">
+      <div class="card-title">Image Gallery (Click to Select)</div>
+      <div class="gallery" id="gallery" data-testid="image-gallery">
+        <div class="gallery-img" data-testid="gallery-img-1" onclick="selectImg(this, 1)">🌄</div>
+        <div class="gallery-img" data-testid="gallery-img-2" onclick="selectImg(this, 2)">🏙️</div>
+        <div class="gallery-img" data-testid="gallery-img-3" onclick="selectImg(this, 3)">🌊</div>
+        <div class="gallery-img" data-testid="gallery-img-4" onclick="selectImg(this, 4)">🌿</div>
+        <div class="gallery-img" data-testid="gallery-img-5" onclick="selectImg(this, 5)">🏔️</div>
+        <div class="gallery-img" data-testid="gallery-img-6" onclick="selectImg(this, 6)">🌸</div>
+      </div>
+      <div id="gallery-selection" class="text-sm text-muted mt-1" data-testid="gallery-selection">None selected</div>
+
+      <hr class="divider">
+      <div class="card-title">Progress Bars</div>
+      <div>
+        <div style="display:flex; justify-content:space-between;"><span class="text-sm">Selenium</span><span class="text-sm text-muted">85%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-teal" style="width:85%"></div></div>
+
+        <div style="display:flex; justify-content:space-between;"><span class="text-sm">Playwright</span><span class="text-sm text-muted">72%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-purple" style="width:72%"></div></div>
+
+        <div style="display:flex; justify-content:space-between;"><span class="text-sm">REST API</span><span class="text-sm text-muted">90%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-blue" style="width:90%"></div></div>
+
+        <div style="display:flex; justify-content:space-between;"><span class="text-sm">Mobile (Appium)</span><span class="text-sm text-muted">60%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:60%"></div></div>
+      </div>
+    </div>
+
+    <!-- SHADOW DOM -->
+    <div class="card">
+      <div class="card-title">Shadow DOM Element</div>
+      <p class="text-sm text-muted" style="margin-bottom:0.75rem;">Elements inside a Web Component's shadow root</p>
+      <div id="shadow-host" data-testid="shadow-host"></div>
+      <div class="code-block" style="margin-top:0.75rem; max-height:80px;">// Selenium (JS executor):
+WebElement shadow = driver.findElement(By.id("shadow-host"));
+SearchContext shadowRoot = shadow.getShadowRoot();
+shadowRoot.findElement(By.cssSelector("input"));</div>
+    </div>
+
+    <!-- BROKEN LINKS & ANCHORS -->
+    <div class="card">
+      <div class="card-title">Links, Anchors &amp; Navigation</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="https://www.selenium.dev" target="_blank" data-testid="link-selenium" class="text-sm" style="color:var(--accent);">→ Selenium Official Site</a>
+        <a href="https://playwright.dev" target="_blank" data-testid="link-playwright" class="text-sm" style="color:var(--accent);">→ Playwright Official Site</a>
+        <a href="https://rest-assured.io" target="_blank" data-testid="link-restassured" class="text-sm" style="color:var(--accent);">→ REST Assured</a>
+        <a href="#" data-testid="link-anchor" class="text-sm" style="color:var(--accent2);" onclick="toast('Anchor link clicked!','info'); return false;">→ Anchor link (#)</a>
+        <a href="/broken-404-page" data-testid="link-broken" class="text-sm" style="color:var(--error);">→ Broken link (404)</a>
+        <a href="javascript:void(0)" data-testid="link-js" class="text-sm" style="color:var(--warning);" onclick="toast('JS link triggered!','warning')">→ JavaScript link</a>
+        <a href="mailto:test@autotest.dev" data-testid="link-mailto" class="text-sm" style="color:var(--info);">→ Mailto link</a>
+        <a href="tel:+919876543210" data-testid="link-tel" class="text-sm" style="color:var(--info);">→ Tel link</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:var(--bg2); border-top:1px solid var(--border); padding:1.5rem 2rem; text-align:center;">
+  <p class="text-sm text-muted">AutoTest Playground · All elements carry <code class="mono">data-testid</code>, <code class="mono">id</code>, and semantic attributes for reliable locators</p>
+  <div style="display:flex; justify-content:center; gap:1rem; margin-top:0.75rem; flex-wrap:wrap;">
+    <span class="chip chip-teal">XPath</span>
+    <span class="chip chip-purple">CSS Selectors</span>
+    <span class="chip chip-blue">data-testid</span>
+    <span class="chip chip-green">ARIA Roles</span>
+    <span class="chip chip-amber">Name/ID</span>
+    <span class="chip chip-gray">Link Text</span>
+  </div>
+</footer>
+
+<script>
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+function toast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function openModal(title, body) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent = body;
+  document.getElementById('myModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('myModal').classList.remove('open');
+  document.getElementById('modal-input').value = '';
+}
+function confirmModal() {
+  const reason = document.getElementById('modal-input').value;
+  closeModal();
+  toast('Confirmed! Reason: ' + (reason || 'none'), 'success');
+}
+document.getElementById('myModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  const msg = document.getElementById('login-msg');
+  if (u === 'admin' && p === 'password123') {
+    msg.innerHTML = '<div class="alert alert-success" data-testid="login-success">Login successful! Welcome, admin.</div>';
+  } else if (!u || !p) {
+    msg.innerHTML = '<div class="alert alert-error" data-testid="login-error">Please fill all fields.</div>';
+  } else {
+    msg.innerHTML = '<div class="alert alert-error" data-testid="login-error">Invalid credentials. Try admin / password123.</div>';
+  }
+}
+
+// ─── REGISTER ─────────────────────────────────────────────────────────────────
+function handleReg(e) {
+  e.preventDefault();
+  const msg = document.getElementById('reg-msg');
+  msg.innerHTML = '<div class="alert alert-success" data-testid="reg-success">Registration successful! Check your email.</div>';
+  toast('Registration submitted!', 'success');
+}
+
+// ─── DIALOG ───────────────────────────────────────────────────────────────────
+function handleConfirm() {
+  const r = confirm('Do you want to proceed?');
+  document.getElementById('dialog-result').innerHTML =
+    `<div class="alert ${r ? 'alert-success' : 'alert-error'}" data-testid="confirm-result">confirm() returned: ${r}</div>`;
+}
+function handlePrompt() {
+  const r = prompt('Enter your name:');
+  document.getElementById('dialog-result').innerHTML =
+    `<div class="alert alert-info" data-testid="prompt-result">prompt() returned: "${r}"</div>`;
+}
+
+// ─── COUNTER ─────────────────────────────────────────────────────────────────
+let counterVal = 0;
+function changeCounter(delta, mode) {
+  if (mode === 'reset') counterVal = 0;
+  else counterVal += delta;
+  document.getElementById('counter-val').textContent = counterVal;
+}
+
+// ─── BUTTON LOADING ───────────────────────────────────────────────────────────
+function simulateLoading(btn) {
+  btn.disabled = true;
+  btn.textContent = '⏳ Loading...';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = 'Click to Load';
+    toast('Loading complete!', 'success');
+  }, 2000);
+}
+
+// ─── DYNAMIC BTN ─────────────────────────────────────────────────────────────
+function showDynamicBtn() {
+  const c = document.getElementById('dynamic-btn-container');
+  c.innerHTML = '<span class="text-sm text-muted">Waiting...</span>';
+  setTimeout(() => {
+    c.innerHTML = '<button class="btn btn-success btn-sm" data-testid="dynamic-button">I appeared after 2s! ✓</button>';
+    toast('Dynamic button is now visible!', 'success');
+  }, 2000);
+}
+
+// ─── STEPPER ─────────────────────────────────────────────────────────────────
+let currentStep = 2;
+function advanceStepper() {
+  if (currentStep >= 4) { toast('Already on final step!', 'warning'); return; }
+  const curr = document.getElementById('step-' + currentStep);
+  curr.classList.remove('active'); curr.classList.add('done');
+  curr.querySelector('.step-num').textContent = '✓';
+  const lines = document.querySelectorAll('.step-line');
+  if (currentStep - 1 < lines.length) lines[currentStep - 1].classList.add('done');
+  currentStep++;
+  const next = document.getElementById('step-' + currentStep);
+  if (next) { next.classList.add('active'); toast('Advanced to step ' + currentStep, 'success'); }
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id)?.classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── ACCORDION ───────────────────────────────────────────────────────────────
+function toggleAccordion(btn) {
+  const item = btn.parentElement;
+  item.classList.toggle('open');
+}
+
+// ─── TABLE ───────────────────────────────────────────────────────────────────
+const USERS = [
+  {id:1, name:'Alice Johnson', email:'alice@test.com', role:'Admin', status:'active'},
+  {id:2, name:'Bob Smith', email:'bob@test.com', role:'Developer', status:'active'},
+  {id:3, name:'Carol Davis', email:'carol@test.com', role:'Tester', status:'inactive'},
+  {id:4, name:'David Wilson', email:'david@test.com', role:'Manager', status:'pending'},
+  {id:5, name:'Eve Martinez', email:'eve@test.com', role:'Designer', status:'active'},
+  {id:6, name:'Frank Lee', email:'frank@test.com', role:'Tester', status:'active'},
+  {id:7, name:'Grace Kim', email:'grace@test.com', role:'Developer', status:'pending'},
+  {id:8, name:'Henry Brown', email:'henry@test.com', role:'Admin', status:'inactive'},
+  {id:9, name:'Iris Chen', email:'iris@test.com', role:'Tester', status:'active'},
+  {id:10, name:'Jake Taylor', email:'jake@test.com', role:'Developer', status:'active'},
+  {id:11, name:'Karen White', email:'karen@test.com', role:'Manager', status:'inactive'},
+  {id:12, name:'Liam Scott', email:'liam@test.com', role:'Tester', status:'pending'},
+];
+let tableData = [...USERS];
+let currentPage = 1; const rowsPerPage = 5;
+let sortCol = -1, sortDir = 1;
+
+function renderTable() {
+  const search = document.getElementById('table-search').value.toLowerCase();
+  const status = document.getElementById('status-filter').value;
+  let filtered = tableData.filter(r =>
+    (!search || r.name.toLowerCase().includes(search) || r.email.toLowerCase().includes(search) || r.role.toLowerCase().includes(search)) &&
+    (!status || r.status === status)
+  );
+  const total = filtered.length;
+  const pages = Math.ceil(total / rowsPerPage);
+  currentPage = Math.min(currentPage, pages || 1);
+  const start = (currentPage - 1) * rowsPerPage;
+  const page = filtered.slice(start, start + rowsPerPage);
+  const statusMap = {active: 'chip-green', inactive: 'chip-red', pending: 'chip-amber'};
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = page.length ? page.map(r => `
+    <tr data-testid="table-row-${r.id}">
+      <td><input type="checkbox" data-testid="row-check-${r.id}"></td>
+      <td data-testid="cell-id-${r.id}">${r.id}</td>
+      <td data-testid="cell-name-${r.id}">${r.name}</td>
+      <td data-testid="cell-email-${r.id}">${r.email}</td>
+      <td data-testid="cell-role-${r.id}">${r.role}</td>
+      <td data-testid="cell-status-${r.id}"><span class="chip ${statusMap[r.status] || 'chip-gray'}">${r.status}</span></td>
+      <td>
+        <button class="btn btn-info btn-sm" data-testid="edit-btn-${r.id}" onclick="toast('Editing ${r.name}','info')" style="margin-right:4px;">Edit</button>
+        <button class="btn btn-danger btn-sm" data-testid="delete-btn-${r.id}" onclick="deleteRow(${r.id})">Delete</button>
+      </td>
+    </tr>`).join('') : `<tr><td colspan="7" style="text-align:center; color:var(--text3); padding:2rem;">No records found</td></tr>`;
+  document.getElementById('table-count').textContent = `Showing ${start + 1}–${Math.min(start + rowsPerPage, total)} of ${total} records`;
+  renderPagination(pages);
+}
+
+function renderPagination(pages) {
+  const p = document.getElementById('pagination');
+  p.innerHTML = `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= pages; i++) {
+    p.innerHTML += `<button class="page-btn ${i===currentPage?'active':''}" data-testid="page-btn-${i}" onclick="goPage(${i})">${i}</button>`;
+  }
+  p.innerHTML += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage===pages?'disabled':''}>›</button>`;
+}
+
+function goPage(p) { currentPage = p; renderTable(); }
+function filterTable() { currentPage = 1; renderTable(); }
+function resetTable() {
+  tableData = [...USERS];
+  document.getElementById('table-search').value = '';
+  document.getElementById('status-filter').value = '';
+  currentPage = 1; renderTable();
+}
+
+function addTableRow() {
+  const id = tableData.length + 1;
+  tableData.push({id, name:'New User ' + id, email:`user${id}@test.com`, role:'Tester', status:'pending'});
+  renderTable();
+  toast('Row added!', 'success');
+}
+
+function deleteRow(id) {
+  tableData = tableData.filter(r => r.id !== id);
+  renderTable();
+  toast('Row deleted!', 'error');
+}
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('#table-body input[type=checkbox]').forEach(c => c.checked = cb.checked);
+}
+
+function sortTable(col) {
+  const ths = document.querySelectorAll('th.sortable');
+  ths.forEach(t => t.classList.remove('sorted-asc','sorted-desc'));
+  if (sortCol === col) sortDir = -sortDir; else { sortCol = col; sortDir = 1; }
+  const keys = ['','id','name','email','role','status'];
+  const key = keys[col];
+  tableData.sort((a,b) => {
+    const va = a[key], vb = b[key];
+    return typeof va === 'number' ? (va - vb) * sortDir : String(va).localeCompare(String(vb)) * sortDir;
+  });
+  ths[col-1].classList.add(sortDir === 1 ? 'sorted-asc' : 'sorted-desc');
+  renderTable();
+}
+
+renderTable();
+
+// ─── API TESTER ───────────────────────────────────────────────────────────────
+let currentMethod = 'GET';
+function setMethod(m) {
+  currentMethod = m;
+  document.querySelectorAll('.method-btn').forEach(b => {
+    b.className = 'method-btn';
+    if (b.dataset.method === m) b.className += ' active-' + m.toLowerCase();
+  });
+  document.getElementById('api-body-group').style.display = ['POST','PUT','PATCH'].includes(m) ? '' : 'none';
+}
+setMethod('GET');
+
+async function sendApiRequest() {
+  const url = document.getElementById('api-url').value;
+  const statusEl = document.getElementById('api-status');
+  const timeEl = document.getElementById('api-time');
+  const sizeEl = document.getElementById('api-size');
+  const respEl = document.getElementById('api-response');
+  respEl.textContent = 'Loading...';
+  statusEl.textContent = '...'; statusEl.className = 'chip chip-gray';
+  const t0 = Date.now();
+  try {
+    let opts = { method: currentMethod, headers: { 'Content-Type': 'application/json' } };
+    if (['POST','PUT','PATCH'].includes(currentMethod)) {
+      opts.body = document.getElementById('api-body').value;
+    }
+    const res = await fetch(url, opts);
+    const elapsed = Date.now() - t0;
+    const text = await res.text();
+    let pretty;
+    try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch { pretty = text; }
+    respEl.textContent = pretty;
+    timeEl.textContent = elapsed + ' ms';
+    sizeEl.textContent = (text.length / 1024).toFixed(2) + ' KB';
+    statusEl.textContent = res.status + ' ' + res.statusText;
+    statusEl.className = 'chip ' + (res.ok ? 'chip-green' : 'chip-red');
+    window._lastResponse = { status: res.status, body: text };
+  } catch (err) {
+    respEl.textContent = 'Error: ' + err.message;
+    statusEl.textContent = 'Error'; statusEl.className = 'chip chip-red';
+  }
+}
+
+function fillEndpoint(method, url) {
+  setMethod(method);
+  document.getElementById('api-url').value = url;
+  toast('Endpoint filled: ' + method + ' ' + url, 'info');
+}
+
+function runAssertions() {
+  const r = document.getElementById('assertion-results');
+  if (!window._lastResponse) { r.innerHTML = '<div class="alert alert-warning">Run a request first!</div>'; return; }
+  const expectedStatus = parseInt(document.getElementById('assert-status').value);
+  const key = document.getElementById('assert-key').value.trim();
+  let html = '';
+  const statusPass = window._lastResponse.status === expectedStatus;
+  html += `<div class="alert ${statusPass ? 'alert-success' : 'alert-error'}" data-testid="assert-status-result">
+    ${statusPass ? '✓' : '✕'} Status: expected ${expectedStatus}, got ${window._lastResponse.status}</div>`;
+  if (key) {
+    try {
+      const body = JSON.parse(window._lastResponse.body);
+      const found = Array.isArray(body) ? key in body[0] : key in body;
+      html += `<div class="alert ${found ? 'alert-success' : 'alert-error'}" data-testid="assert-key-result">
+        ${found ? '✓' : '✕'} Key "${key}" ${found ? 'found' : 'NOT found'} in response body</div>`;
+    } catch {
+      html += `<div class="alert alert-warning">Cannot parse body as JSON</div>`;
+    }
+  }
+  r.innerHTML = html;
+}
+
+// ─── WAITS / DELAYS ───────────────────────────────────────────────────────────
+function showAfter(ms, id) {
+  const el = document.getElementById(id);
+  el.style.display = 'none';
+  setTimeout(() => { el.style.display = ''; }, ms);
+}
+
+let progressInterval;
+function startProgress() {
+  const wrap = document.getElementById('progress-wrap');
+  const fill = document.getElementById('progress-fill');
+  const txt = document.getElementById('progress-text');
+  const done = document.getElementById('progress-done');
+  wrap.style.display = '';
+  done.style.display = 'none';
+  fill.style.width = '0%';
+  txt.textContent = '0%';
+  clearInterval(progressInterval);
+  let p = 0;
+  progressInterval = setInterval(() => {
+    p += Math.floor(Math.random() * 8) + 3;
+    if (p >= 100) { p = 100; clearInterval(progressInterval); done.style.display = ''; toast('Progress complete!', 'success'); }
+    fill.style.width = p + '%';
+    txt.textContent = p + '%';
+  }, 200);
+}
+
+// ─── TIMER ───────────────────────────────────────────────────────────────────
+let timerVal = 30, timerInterval = null, timerRunning = false;
+function timerAction(action) {
+  const disp = document.getElementById('timer-display');
+  const msg = document.getElementById('timer-msg');
+  if (action === 'start' && !timerRunning) {
+    if (timerVal <= 0) timerVal = 30;
+    timerRunning = true;
+    timerInterval = setInterval(() => {
+      timerVal--;
+      const m = String(Math.floor(timerVal/60)).padStart(2,'0');
+      const s = String(timerVal % 60).padStart(2,'0');
+      disp.textContent = m + ':' + s;
+      if (timerVal <= 0) {
+        clearInterval(timerInterval); timerRunning = false;
+        msg.innerHTML = '<div class="alert alert-success" data-testid="timer-done">⏰ Timer finished!</div>';
+        toast('Timer finished!', 'warning');
+      }
+    }, 1000);
+  } else if (action === 'pause') {
+    clearInterval(timerInterval); timerRunning = false;
+  } else if (action === 'reset') {
+    clearInterval(timerInterval); timerRunning = false;
+    timerVal = 30; disp.textContent = '00:30'; msg.innerHTML = '';
+  }
+}
+
+// ─── LIVE DATA ────────────────────────────────────────────────────────────────
+function updateLiveData() {
+  const d = document.getElementById('live-data');
+  const u = document.getElementById('last-updated');
+  const fakeData = {
+    cpu: Math.floor(Math.random() * 80) + 10 + '%',
+    memory: Math.floor(Math.random() * 60) + 30 + '%',
+    requests: Math.floor(Math.random() * 500) + 100 + '/s',
+    uptime: Math.floor(Date.now() / 1000) + 's'
+  };
+  d.textContent = JSON.stringify(fakeData, null, 2);
+  u.textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+}
+updateLiveData();
+setInterval(updateLiveData, 5000);
+
+// ─── DEBOUNCE SEARCH ─────────────────────────────────────────────────────────
+let debounceTimer;
+const SEARCH_DATA = ['Alice Johnson','Bob Smith','Carol Davis','David Wilson','Eve Martinez','Frank Lee','Grace Kim','Henry Brown','Iris Chen','Jake Taylor'];
+function debounceSearch(val) {
+  clearTimeout(debounceTimer);
+  document.getElementById('search-results').innerHTML = '<p class="text-sm text-muted">Searching...</p>';
+  debounceTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const results = q ? SEARCH_DATA.filter(n => n.toLowerCase().includes(q)) : [];
+    document.getElementById('search-results').innerHTML = results.length
+      ? results.map(n => `<div class="search-result-item" data-testid="search-result">👤 ${n.replace(new RegExp(q, 'gi'), m => '<em>' + m + '</em>')}</div>`).join('')
+      : (q ? '<p class="text-sm text-muted">No results for "' + q + '"</p>' : '<p class="text-sm text-muted">Type to search...</p>');
+  }, 600);
+}
+
+// ─── INFINITE SCROLL ─────────────────────────────────────────────────────────
+let scrollPage = 0;
+function loadMoreItems() {
+  const list = document.getElementById('infinite-list');
+  if (list.querySelector('.scroll-loader')) list.querySelector('.scroll-loader').remove();
+  for (let i = 0; i < 8; i++) {
+    const idx = scrollPage * 8 + i + 1;
+    const div = document.createElement('div');
+    div.className = 'scroll-item';
+    div.setAttribute('data-testid', 'scroll-item-' + idx);
+    div.textContent = `Test Case #${idx}: Validate user login with valid credentials`;
+    list.appendChild(div);
+  }
+  scrollPage++;
+  document.getElementById('scroll-count').textContent = scrollPage * 8;
+  if (scrollPage < 5) {
+    const loader = document.createElement('div');
+    loader.className = 'scroll-loader';
+    loader.textContent = 'Scroll to load more...';
+    list.appendChild(loader);
+  }
+}
+function checkScroll(el) {
+  if (el.scrollHeight - el.scrollTop - el.clientHeight < 30) loadMoreItems();
+}
+loadMoreItems();
+
+// ─── DRAG & DROP ─────────────────────────────────────────────────────────────
+let dragEl = null;
+function dragStart(e) { dragEl = e.target; e.dataTransfer.effectAllowed = 'move'; }
+function dropItem(e) {
+  e.preventDefault();
+  const target = e.currentTarget;
+  target.style.borderColor = 'var(--border2)';
+  if (dragEl) {
+    const empty = target.querySelector('.text-sm');
+    if (empty) empty.remove();
+    target.appendChild(dragEl);
+    dragEl = null;
+    toast('Item dropped!', 'success');
+  }
+}
+
+// ─── FILE UPLOAD ─────────────────────────────────────────────────────────────
+function handleFileDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag-over');
+  displayFiles(e.dataTransfer.files);
+}
+function handleFileSelect(input) { displayFiles(input.files); }
+function displayFiles(files) {
+  const list = document.getElementById('file-list');
+  list.innerHTML = '';
+  Array.from(files).forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    div.setAttribute('data-testid', 'uploaded-file');
+    div.innerHTML = `📎 <strong>${f.name}</strong> <span class="text-muted">(${(f.size/1024).toFixed(1)} KB · ${f.type || 'unknown'})</span>`;
+    list.appendChild(div);
+  });
+  if (files.length) toast(files.length + ' file(s) selected!', 'success');
+}
+
+// ─── CONTEXT MENU ─────────────────────────────────────────────────────────────
+function showContextMenu(e) {
+  e.preventDefault();
+  const m = document.getElementById('custom-context-menu');
+  m.style.display = 'block';
+  m.style.left = e.clientX + 'px';
+  m.style.top = e.clientY + 'px';
+}
+function ctxAction(action) {
+  document.getElementById('custom-context-menu').style.display = 'none';
+  document.getElementById('ctx-log').textContent = 'Context menu action: ' + action;
+  toast('Context action: ' + action, 'info');
+}
+document.addEventListener('click', () => {
+  document.getElementById('custom-context-menu').style.display = 'none';
+});
+
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+function logKey(e) {
+  const log = document.getElementById('key-log');
+  log.textContent = `Key: "${e.key}" | Code: "${e.code}" | Ctrl: ${e.ctrlKey} | Alt: ${e.altKey} | Shift: ${e.shiftKey}`;
+}
+
+// ─── GALLERY ─────────────────────────────────────────────────────────────────
+let selectedImgs = new Set();
+function selectImg(el, id) {
+  if (selectedImgs.has(id)) { selectedImgs.delete(id); el.classList.remove('selected'); }
+  else { selectedImgs.add(id); el.classList.add('selected'); }
+  document.getElementById('gallery-selection').textContent = selectedImgs.size
+    ? 'Selected: Image(s) ' + [...selectedImgs].join(', ')
+    : 'None selected';
+}
+
+// ─── SHADOW DOM ───────────────────────────────────────────────────────────────
+const host = document.getElementById('shadow-host');
+const shadow = host.attachShadow({mode: 'open'});
+shadow.innerHTML = `
+  <style>
+    div { background: #111827; border: 1px dashed #3a4f6e; border-radius: 8px; padding: 14px; }
+    p { color: #94a3b8; font-size: 13px; margin-bottom: 8px; font-family: sans-serif; }
+    input { width: 100%; padding: 8px 10px; background: #0b0f1a; border: 1px solid #2a3550; border-radius: 6px; color: #e2e8f0; font-size: 13px; box-sizing: border-box; margin-bottom: 8px; }
+    button { padding: 7px 16px; background: #00d4aa; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #000; font-size: 13px; }
+    #shadow-out { color: #00d4aa; font-size: 12px; margin-top: 6px; font-family: monospace; }
+  </style>
+  <div>
+    <p>🕶 Shadow DOM — hidden from normal selectors</p>
+    <input id="shadow-input" type="text" placeholder="Input inside Shadow DOM">
+    <button onclick="document.querySelector('#shadow-host').shadowRoot.getElementById('shadow-out').textContent='Shadow button clicked! ✓'">Click Shadow Button</button>
+    <div id="shadow-out"></div>
+  </div>`;
+</script>
+</body>
+</html>
